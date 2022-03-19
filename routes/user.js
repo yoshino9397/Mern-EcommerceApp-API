@@ -50,7 +50,28 @@ router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-//1:13:15~
 //GET ALL USER
+router.get("/", async (req, res) => {
+  /// verifyTokenAndAdmin抜いた
+  const query = req.query.new;
+  try {
+    const users = query
+      ? await User.find().sort({ _id: -1 }).limit(5)
+      : await User.find();
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//GET USER STATS
+router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
+
+
+
+
+
+  
+})
 
 module.exports = router;

@@ -25,7 +25,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({
-      userName: req.body.user_name,
+      username: req.body.username,
     });
 
     !user && res.status(401).json("Wrong User Name");
@@ -56,6 +56,5 @@ router.post("/login", async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 
 module.exports = router;
