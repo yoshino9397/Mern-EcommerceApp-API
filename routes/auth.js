@@ -27,16 +27,19 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({
       userName: req.body.user_name,
     });
+
     !user && res.status(401).json("Wrong User Name");
+
     const hashedPassword = CryptoJS.AES.decrypt(
       user.password,
       process.env.PASS_SEC
     );
-    const OriginalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
-    OriginalPassword != req.body.password &&
-      res.status(401).json("Wrong Password");
-    const { password, ...others } = user._doc;
+    const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
+
+    const inputPassword = req.body.password;
+
+    originalPassword != inputPassword && res.status(401).json("Wrong Password");
 
     const accessToken = jwt.sign(
       {
@@ -47,12 +50,12 @@ router.post("/login", async (req, res) => {
       { expiresIn: "3d" }
     );
 
-    res.status(201).json({ others, accessToken });
+    const { password, ...others } = user._doc;
+    res.status(200).json({ ...others, accessToken });
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-module.exports = router;
 
-///54:12~
+module.exports = router;
