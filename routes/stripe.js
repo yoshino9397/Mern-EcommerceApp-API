@@ -1,6 +1,9 @@
+require("dotenv").config();
+///import this to access the stripe key
 const router = require("express").Router();
 const KEY = process.env.STRIPE_KEY
 const stripe = require("stripe")(KEY);
+
 
 router.post("/payment", (req, res) => {
   stripe.charges.create(
